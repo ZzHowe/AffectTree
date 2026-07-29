@@ -1,0 +1,46 @@
+# AffectTree 默认配置
+
+reasoning:
+  max_depth: 6        # 树最大深度 D
+  max_width: 3        # 单节点最大分支数 W
+  coarse_fps: 0.2     # 粗采样帧率（概览）
+  fine_fps: 2.0       # 细采样帧率（FaceZoom 后）
+
+tools:
+  enabled:
+    - temporal_zoom
+    - temporal_jump
+    - sliding
+    - face_track
+    - face_zoom
+    - body_crop
+    - face_au
+    - pose_gesture
+    - prosody
+    - scene_tone
+    - affect_spot
+  face_track:
+    min_face_size: 48     # 最小人脸框（像素）
+    iou_threshold: 0.3    # 跟踪关联阈值
+  face_zoom:
+    scale: 2.0            # 裁剪放大倍率
+    pad: 0.25             # 裁剪框外扩比例
+  affect_spot:
+    method: cusum         # cusum | bocpd
+    threshold: 5.0        # 变点判定阈值
+
+training:
+  sft:
+    epochs: 2
+    lr: 1.0e-5
+  emo_rpo:
+    group_size: 4         # 每个 video-query 采样的推理树数量
+    kl_coef: 0.04         # KL 正则系数
+    clip_delta: 0.2       # 重要性采样裁剪
+    lambda_ccc: 1.0       # R_evidence 中 VA 轨迹 CCC 权重
+    lambda_tiou: 1.0      # R_evidence 中转折点 F1@tIoU 权重
+    tree_reward_coef: 0.5 # R_tree 在总优势中的系数 k
+
+eval:
+  tiou_thresholds: [0.3, 0.5]
+  transition_tolerance: 2.0   # 转折点边界容差（秒）
